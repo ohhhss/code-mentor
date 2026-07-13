@@ -1,0 +1,189 @@
+.homepage {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.homepage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 600px;
+  background: 
+    radial-gradient(ellipse 800px 400px at 20% 0%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 600px 300px at 80% 10%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse 400px 200px at 50% 0%, rgba(236, 72, 153, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="dark"] .homepage::before {
+  background: 
+    radial-gradient(ellipse 800px 400px at 20% 0%, rgba(96, 165, 250, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 600px 300px at 80% 10%, rgba(167, 139, 250, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 400px 200px at 50% 0%, rgba(244, 114, 182, 0.08) 0%, transparent 50%);
+}
+
+.homepage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 25px 25px, var(--border-color) 1px, transparent 1px),
+    radial-gradient(circle at 75px 75px, var(--border-color) 0.5px, transparent 0.5px);
+  background-size: 100px 100px;
+  background-position: 0 0, 50px 50px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse at center top, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center top, black 0%, transparent 70%);
+}
+
+.homepage-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+.homepage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 64px;
+}
+
+.homepage-hero {
+  text-align: center;
+  margin-bottom: 72px;
+  position: relative;
+}
+
+.homepage-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--accent-color) 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  position: relative;
+  display: inline-block;
+}
+
+.homepage-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color), #8b5cf6);
+  border-radius: var(--radius-full);
+  opacity: 0.6;
+}
+
+.homepage-subtitle {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+
+.homepage-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.homepage-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.homepage-section-title::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(180deg, var(--accent-color), #8b5cf6);
+  border-radius: var(--radius-full);
+}
+
+.homepage-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.homepage-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 72px;
+}
+
+.homepage-footer {
+  text-align: center;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-color);
+}
+
+.homepage-footer-text {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .homepage-container {
+    padding: 24px 16px 32px;
+  }
+
+  .homepage-header {
+    margin-bottom: 40px;
+  }
+
+  .homepage-hero {
+    margin-bottom: 48px;
+  }
+
+  .homepage-title {
+    font-size: 2.25rem;
+  }
+
+  .homepage-title::after {
+    width: 60px;
+    height: 3px;
+  }
+
+  .homepage-subtitle {
+    font-size: 1.25rem;
+    margin-top: 20px;
+  }
+
+  .homepage-description {
+    font-size: 1rem;
+  }
+
+  .homepage-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+}

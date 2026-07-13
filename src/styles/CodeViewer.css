@@ -1,0 +1,415 @@
+.code-viewer {
+  border-radius: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.code-viewer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--code-header-bg, var(--bg-secondary));
+  border-bottom: 1px solid var(--code-line-divider, var(--border-color));
+  padding: 10px 16px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.code-viewer-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent-color), #8b5cf6);
+}
+
+.code-viewer-filename-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.code-viewer-header-accent {
+  display: none;
+}
+
+.code-viewer-file-icon {
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.code-viewer-filename {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.code-viewer-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.code-viewer-copy-btn:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.code-viewer-copy-btn.copied {
+  color: #10b981;
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.code-viewer-content {
+  position: relative;
+  overflow: auto;
+  flex: 1;
+}
+
+.code-viewer-pre {
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+  overflow: visible;
+}
+
+.code-viewer-code {
+  display: block;
+  padding: 8px 0;
+  background: transparent !important;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.8;
+  tab-size: 2;
+}
+
+.code-line {
+  display: flex;
+  padding: 0;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.code-line:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 6%, transparent);
+}
+
+.code-line.selected {
+  background-color: color-mix(in srgb, var(--accent-color) 18%, transparent);
+}
+
+.code-line.selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--accent-color);
+}
+
+.code-line.highlighted {
+  background-color: color-mix(in srgb, var(--accent-color) 14%, transparent);
+}
+
+.code-line.highlighted::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--accent-color);
+}
+
+.code-line.selected.highlighted {
+  background-color: color-mix(in srgb, var(--accent-color) 22%, transparent);
+}
+
+.line-number {
+  width: 56px;
+  min-width: 56px;
+  text-align: right;
+  padding: 0 16px 0 12px;
+  color: var(--text-muted);
+  user-select: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.8;
+  position: relative;
+}
+
+.line-number::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background-color: var(--border-color);
+}
+
+.line-content {
+  flex: 1;
+  white-space: pre;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.8;
+  padding: 0 16px;
+}
+
+/* Light theme token colors */
+:root[data-theme="light"] .code-viewer,
+:root:not([data-theme]) .code-viewer {
+  background-color: #fdfdfe;
+  --code-bg: #fdfdfe;
+  --code-header-bg: #f6f8fc;
+  --code-text: #1f2328;
+  --token-comment: #6b7380;
+  --token-keyword: #a31a56;
+  --token-string: #0a7d3b;
+  --token-number: #8c4a00;
+  --token-function: #5a34d6;
+  --token-class-name: #1168a8;
+  --token-type-name: #1168a8;
+  --token-builtin: #1168a8;
+  --token-property: #8250df;
+  --token-variable: #1f2328;
+  --token-operator: #8a1c5e;
+  --token-punctuation: #5c6370;
+  --token-tag: #0a7d3b;
+  --token-attr-name: #8250df;
+  --token-attr-value: #0a7d3b;
+  --token-boolean: #a31a56;
+  --token-constant: #8c4a00;
+  --token-regex: #0550ae;
+  --token-plain: #1f2328;
+  --code-line-number: #8b95a5;
+  --code-line-divider: #e2e8f0;
+}
+
+/* Dark theme token colors */
+:root[data-theme="dark"] .code-viewer {
+  background-color: #0c0f1a;
+  --code-bg: #0c0f1a;
+  --code-header-bg: #121629;
+  --code-text: #dce3f0;
+  --token-comment: #5b6580;
+  --token-keyword: #c792ea;
+  --token-string: #c3e88d;
+  --token-number: #f78c6c;
+  --token-function: #82aaff;
+  --token-class-name: #ffcb6b;
+  --token-type-name: #ffcb6b;
+  --token-builtin: #ffcb6b;
+  --token-property: #89ddff;
+  --token-variable: #dce3f0;
+  --token-operator: #89ddff;
+  --token-punctuation: #7f8ba8;
+  --token-tag: #f07178;
+  --token-attr-name: #ffcb6b;
+  --token-attr-value: #c3e88d;
+  --token-boolean: #f78c6c;
+  --token-constant: #f78c6c;
+  --token-regex: #89ddff;
+  --token-plain: #dce3f0;
+  --code-line-number: #4a5578;
+  --code-line-divider: #1e2640;
+}
+
+/* Override line-number color for code viewer */
+.code-viewer .line-number {
+  color: var(--code-line-number);
+}
+.code-viewer .line-number::after {
+  background-color: var(--code-line-divider);
+}
+
+/* Base token reset */
+.code-viewer .token {
+  background: transparent !important;
+  color: var(--token-plain);
+}
+
+/* Code text baseline */
+.code-viewer .code-viewer-code,
+.code-viewer .line-content {
+  color: var(--code-text);
+}
+
+/* =============================================
+   Token styling — ordered by priority
+   (later rules override earlier ones on elements
+    with multiple token classes)
+   ============================================= */
+
+/* 1. Punctuation — lowest priority, structural */
+.code-viewer .token.punctuation {
+  color: var(--token-punctuation);
+}
+
+/* 2. Operators & arrows */
+.code-viewer .token.operator,
+.code-viewer .token.arrow {
+  color: var(--token-operator);
+}
+
+/* 3. Plain text & variables & entities */
+.code-viewer .token.plain,
+.code-viewer .token.variable,
+.code-viewer .token.entity {
+  color: var(--token-variable);
+}
+
+/* 4. Properties & attributes */
+.code-viewer .token.property,
+.code-viewer .token.property-access {
+  color: var(--token-property);
+}
+
+.code-viewer .token.attr-name {
+  color: var(--token-attr-name);
+}
+
+/* 5. Tags & selectors */
+.code-viewer .token.tag,
+.code-viewer .token.selector {
+  color: var(--token-tag);
+}
+
+/* 6. Strings & regex */
+.code-viewer .token.string,
+.code-viewer .token.attr-value,
+.code-viewer .token.char,
+.code-viewer .token.url {
+  color: var(--token-string);
+}
+
+.code-viewer .token.regex {
+  color: var(--token-regex);
+}
+
+/* 7. Numbers & constants */
+.code-viewer .token.number,
+.code-viewer .token.symbol,
+.code-viewer .token.constant {
+  color: var(--token-number);
+}
+
+/* 8. Functions & methods */
+.code-viewer .token.function,
+.code-viewer .token.generic-function > .token.function,
+.code-viewer .token.method {
+  color: var(--token-function);
+}
+
+/* 9. Types & builtins */
+.code-viewer .token.class-name,
+.code-viewer .token.maybe-class-name,
+.code-viewer .token.known-class-name {
+  color: var(--token-type-name);
+}
+
+.code-viewer .token.builtin {
+  color: var(--token-builtin);
+}
+
+/* Fix compound classes: when parent is class-name but child is operator/punctuation,
+   the child should keep its own color (not inherit class-name color).
+   These selectors ensure operators/punctuation inside generic brackets stay correct. */
+.code-viewer .token.class-name .token.operator,
+.code-viewer .token.generic .token.operator,
+.code-viewer .token.class-name .token.punctuation,
+.code-viewer .token.generic .token.punctuation {
+  color: var(--token-punctuation);
+}
+
+.code-viewer .token.class-name .token.builtin,
+.code-viewer .token.generic .token.builtin {
+  color: var(--token-builtin);
+}
+
+/* 10. Keywords & booleans — HIGHEST semantic priority */
+.code-viewer .token.keyword,
+.code-viewer .token.boolean,
+.code-viewer .token.important,
+.code-viewer .token.atrule {
+  color: var(--token-keyword);
+  font-weight: 500;
+}
+
+/* Ensure keywords inside generic/class-name contexts win over type color */
+.code-viewer .token.class-name.keyword,
+.code-viewer .token.generic .token.keyword,
+.code-viewer .token.generic-function .token.keyword {
+  color: var(--token-keyword);
+  font-weight: 500;
+}
+
+/* Ensure constants/type params (like T, K) in generics get number/constant color */
+.code-viewer .token.generic .token.constant,
+.code-viewer .token.class-name .token.constant {
+  color: var(--token-constant);
+}
+
+/* ---- Comments ---- */
+.code-viewer .token.comment,
+.code-viewer .token.prolog,
+.code-viewer .token.doctype,
+.code-viewer .token.cdata {
+  color: var(--token-comment);
+  font-style: italic;
+}
+
+/* ---- Generic wrapper ---- */
+.code-viewer .token.generic {
+  color: var(--token-plain);
+}
+
+/* ---- Namespace ---- */
+.code-viewer .token.namespace {
+  opacity: 0.85;
+}
+
+/* ---- Diff markers ---- */
+.code-viewer .token.deleted {
+  color: #f85149;
+  background-color: rgba(248, 81, 73, 0.1) !important;
+}
+
+.code-viewer .token.inserted {
+  color: #3fb950;
+  background-color: rgba(63, 185, 80, 0.1) !important;
+}
+
+/* ---- Light theme code-viewer-content background ---- */
+:root[data-theme="light"] .code-viewer-content,
+:root:not([data-theme]) .code-viewer-content {
+  background-color: #fdfdfe;
+}
+
+/* ---- Dark theme code-viewer-content background ---- */
+:root[data-theme="dark"] .code-viewer-content {
+  background-color: #0c0f1a;
+}

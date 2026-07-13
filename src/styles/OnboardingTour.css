@@ -1,0 +1,169 @@
+.onboarding-tour-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: tourFadeIn 0.3s ease;
+}
+
+.onboarding-tour-card {
+  background-color: var(--bg-primary);
+  border-radius: 16px;
+  width: 400px;
+  max-width: 90%;
+  padding: 32px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  animation: tourZoomIn 0.3s ease;
+  position: relative;
+}
+
+.onboarding-tour-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.onboarding-tour-arrow-left {
+  top: 50%;
+  left: -20px;
+  transform: translateY(-50%);
+  border-width: 12px 20px 12px 0;
+  border-color: transparent var(--bg-primary) transparent transparent;
+}
+
+.onboarding-tour-arrow-center {
+  display: none;
+}
+
+.onboarding-tour-arrow-right {
+  top: 50%;
+  right: -20px;
+  transform: translateY(-50%);
+  border-width: 12px 0 12px 20px;
+  border-color: transparent transparent transparent var(--bg-primary);
+}
+
+.onboarding-tour-arrow-top-right {
+  top: -20px;
+  right: 32px;
+  border-width: 0 12px 20px 12px;
+  border-color: transparent transparent var(--bg-primary) transparent;
+}
+
+.onboarding-tour-step-indicator {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.onboarding-tour-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.onboarding-tour-description {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+.onboarding-tour-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.onboarding-tour-skip {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+}
+
+.onboarding-tour-skip:hover {
+  color: var(--text-secondary);
+}
+
+.onboarding-tour-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.onboarding-tour-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--border-color);
+  transition: background-color 0.2s ease;
+}
+
+.onboarding-tour-dot.active {
+  background-color: var(--accent-color);
+}
+
+.onboarding-tour-nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.onboarding-tour-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.onboarding-tour-btn-prev {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.onboarding-tour-btn-prev:hover {
+  background-color: var(--border-color);
+}
+
+.onboarding-tour-btn-next {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+}
+
+.onboarding-tour-btn-next:hover {
+  filter: brightness(1.1);
+}
+
+@keyframes tourFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tourZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
