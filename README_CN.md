@@ -15,6 +15,10 @@
 
 ---
 
+> 🚀 **在线体验**：[https://ohhhss.github.io/code-mentor/](https://ohhhss.github.io/code-mentor/)
+
+---
+
 ## 🎯 Demo 简介
 
 **是什么**：Code Mentor 是一款面向编程初学者的 **AI 源码导读网站**，像一位资深工程师在身边手把手带你读懂优秀开源项目的源码。

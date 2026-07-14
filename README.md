@@ -15,6 +15,8 @@ English | [中文](README_CN.md)
 
 ---
 
+> 🚀 **Live Demo**: [https://ohhhss.github.io/code-mentor/](https://ohhhss.github.io/code-mentor/)
+>
 > 📖 **Looking for the Chinese version?** [点击查看中文版 README](README_CN.md)
 
 ---
