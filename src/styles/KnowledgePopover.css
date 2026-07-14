@@ -10,29 +10,33 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
-  animation: kpFadeIn 0.2s ease forwards;
+  animation: kpFadeIn 0.2s var(--ease-out) forwards;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .kp-overlay.kp-closing {
-  animation: kpFadeOut 0.2s ease forwards;
+  animation: kpFadeOut 0.2s var(--ease-out) forwards;
 }
 
 .kp-card {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.15);
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
   max-width: 420px;
   min-width: 300px;
   width: 90vw;
   max-height: 80vh;
   overflow-y: auto;
   transform: scale(0.95);
-  animation: kpScaleIn 0.2s ease forwards;
+  animation: kpScaleIn 0.2s var(--ease-out) forwards;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .kp-overlay.kp-closing .kp-card {
-  animation: kpScaleOut 0.2s ease forwards;
+  animation: kpScaleOut 0.2s var(--ease-out) forwards;
 }
 
 .kp-header {
@@ -59,7 +63,7 @@
 .kp-badge {
   display: inline-block;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -77,12 +81,12 @@
 }
 
 .kp-badge-design-pattern {
-  background: #8b5cf6;
+  background: var(--accent-color);
   color: white;
 }
 
 .kp-badge-architecture {
-  background: #10b981;
+  background: var(--success-color);
   color: white;
 }
 
@@ -96,12 +100,12 @@
   border: none;
   cursor: pointer;
   padding: 6px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-secondary);
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
   margin-left: 12px;
   flex-shrink: 0;
 }
@@ -124,7 +128,7 @@
 
 .kp-code-block {
   background: var(--code-bg);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 16px;
   overflow-x: auto;
   margin-bottom: 16px;
@@ -137,7 +141,7 @@
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   line-height: 1.6;
-  color: #e2e8f0;
+  color: var(--text-primary);
   white-space: pre;
 }
 

@@ -11,7 +11,9 @@
   justify-content: center;
   z-index: 9999;
   opacity: 0;
-  animation: fadeIn 0.4s ease forwards;
+  animation: fadeIn 0.4s var(--ease-out) forwards;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 @keyframes fadeIn {
@@ -48,18 +50,22 @@
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background-color: var(--accent-color, #3b82f6);
-  border-radius: 2px;
+  background-color: var(--accent-color);
+  border-radius: var(--radius-sm);
 }
 
 .analyzing-scan-container {
   position: relative;
   width: 320px;
   height: 200px;
-  background-color: var(--code-bg);
-  border-radius: 12px;
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
   overflow: hidden;
   margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .analyzing-code-lines {
@@ -72,7 +78,7 @@
   font-family: var(--font-mono);
   font-size: 0.8rem;
   line-height: 1.6;
-  color: #475569;
+  color: var(--text-muted);
   overflow: hidden;
 }
 
@@ -100,19 +106,19 @@
 }
 
 .analyzing-code-keyword {
-  color: #c084fc;
+  color: var(--accent-color);
 }
 
 .analyzing-code-function {
-  color: #60a5fa;
+  color: var(--highlight-color);
 }
 
 .analyzing-code-string {
-  color: #4ade80;
+  color: var(--success-color);
 }
 
 .analyzing-code-comment {
-  color: #64748b;
+  color: var(--text-muted);
   font-style: italic;
 }
 
@@ -125,11 +131,11 @@
   background: linear-gradient(
     to bottom,
     transparent,
-    var(--accent-color, #60a5fa),
-    var(--accent-color, #60a5fa),
+    var(--accent-color),
+    var(--accent-color),
     transparent
   );
-  box-shadow: 0 0 20px var(--accent-color, #60a5fa), 0 0 40px var(--accent-color, #60a5fa);
+  box-shadow: 0 0 12px var(--accent-color), 0 0 24px color-mix(in srgb, var(--accent-color) 40%, transparent);
   animation: scanVertical 2s linear infinite;
   z-index: 10;
 }
@@ -151,10 +157,10 @@
   height: 80px;
   background: linear-gradient(
     to bottom,
-    var(--accent-color, #60a5fa),
+    var(--accent-color),
     transparent
   );
-  opacity: 0.1;
+  opacity: 0.08;
   animation: scanGlow 2s linear infinite;
   pointer-events: none;
   z-index: 5;
@@ -183,7 +189,7 @@
   color: var(--text-muted);
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 0.4s ease, transform 0.4s ease, color 0.3s ease;
+  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out), color 0.3s var(--ease-out);
 }
 
 .analyzing-stage.active {
@@ -203,20 +209,16 @@
   width: 280px;
   height: 4px;
   background-color: var(--bg-tertiary);
-  border-radius: 2px;
+  border-radius: var(--radius-full);
   overflow: hidden;
 }
 
 .analyzing-progress-bar {
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--accent-color, #3b82f6),
-    var(--highlight-color, #60a5fa)
-  );
-  border-radius: 2px;
+  background: var(--accent-color);
+  border-radius: var(--radius-full);
   width: 0%;
-  animation: progressFill 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: progressFill 2s var(--ease-out) forwards;
 }
 
 @keyframes progressFill {

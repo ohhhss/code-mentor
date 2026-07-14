@@ -485,6 +485,48 @@ export const strixProjectData: LargeProjectData = {
           content: '_step()方法实现了经典的ReAct模式：1) 将消息历史发给LLM获取响应；2) 从响应中提取工具调用（支持LangChain原生tool_calls和手动解析JSON块两种格式，兼容不同LLM）；3) 如果有工具调用，执行工具并将结果作为HumanMessage追加到消息历史，这一步让LLM"看到"工具执行结果；4) 如果没有工具调用，说明LLM认为任务已完成，调用_parse_result解析最终答案。这就是AI Agent"自主决策"的核心循环。',
           knowledgePoints: ['agent-orchestration']
         }
+      ],
+      walkthroughSteps: [
+        {
+          id: 1,
+          title: '数据模型与状态枚举',
+          description: '代码开头导入 LangChain 核心类型和 Pydantic 模型，定义 AgentStatus 枚举管理 Agent 生命周期状态（idle/running/waiting/completed/failed）。这些基础数据结构是 Agent 之间通信的"语言"，状态机式的管理让 Agent 行为可追踪、可调试。',
+          filePath: 'agent-base',
+          highlightLines: [1, 25],
+          keyInsight: '状态枚举让 Agent 生命周期清晰可追踪，是编排器调度的基础。'
+        },
+        {
+          id: 2,
+          title: '执行上下文与数据类',
+          description: 'AgentContext 在 Agent 间传递共享状态（扫描 ID、目标、共享字典、发现列表、产物列表），是多 Agent 协作的数据总线。Finding 标准化漏洞发现格式（severity/CWE/CVSS），Artifact 记录执行产物，AgentResult 统一执行结果。这些数据类构成了 Agent 通信的完整契约。',
+          filePath: 'agent-base',
+          highlightLines: [26, 65],
+          keyInsight: '标准化的数据类是多 Agent 协作的契约，让结果可汇总可追溯。'
+        },
+        {
+          id: 3,
+          title: 'BaseSecurityAgent 抽象基类与构造',
+          description: 'BaseSecurityAgent 继承 ABC 成为抽象基类，构造函数接收 LLM 实例、工具列表、迭代上限等配置。每个 Agent 有唯一 ID（uuid4 生成）、独立的消息历史 _messages、专属的 logger。system_prompt 是抽象属性，子类必须实现。这种设计让多个 Agent 实例可并行运行互不干扰。',
+          filePath: 'agent-base',
+          highlightLines: [68, 97],
+          keyInsight: '抽象基类 + 模板方法模式：通用逻辑在基类，定制逻辑由子类实现。'
+        },
+        {
+          id: 4,
+          title: 'Agent 初始化与主循环',
+          description: 'initialize 方法构建初始消息列表（SystemMessage + HumanMessage），run 方法是模板方法模式的体现：固定执行骨架——初始化→循环 max_iterations 次 _step()→每步检查 should_stop→异常捕获返回失败。max_iterations 是防止 Agent 陷入死循环的安全阀，LLM 可能不断调用工具而不给出最终答案。',
+          filePath: 'agent-base',
+          highlightLines: [99, 155],
+          keyInsight: '模板方法模式让子类只需关心单步逻辑，迭代上限是防死循环安全阀。'
+        },
+        {
+          id: 5,
+          title: 'ReAct 单步执行：思考-行动-观察',
+          description: '_step 方法实现经典 ReAct 循环：将消息历史发给 LLM→从响应提取工具调用（兼容 LangChain 原生 tool_calls 和手动解析 JSON 块两种格式）→执行工具并将结果作为 HumanMessage 追加到消息历史→若无工具调用则调用 _parse_result 解析最终答案。add_finding 记录安全发现。这就是 AI Agent 自主决策的核心循环。',
+          filePath: 'agent-base',
+          highlightLines: [157, 208],
+          keyInsight: 'ReAct 模式让 Agent 像人类工程师一样思考-行动-观察-再思考。'
+        }
       ]
     },
     {
@@ -512,6 +554,48 @@ export const strixProjectData: LargeProjectData = {
           title: '并行Agent执行与工具注入',
           content: '_run_phase_agents()展示了如何并行执行多个Agent：实例化每个Agent→收集所有run()协程→asyncio.gather并行执行。return_exceptions=True是关键配置——没有它，一个Agent抛出异常会导致gather立即取消其他所有Agent；设置为True后异常会作为结果返回，编排器可以单独记录失败而不影响其他Agent。_get_tools_for_agent()实现工具的依赖注入：根据Agent类型提供对应的工具集，比如侦察阶段不提供ExploitTool，符合最小权限原则。新增工具或Agent时只需要扩展这个方法，符合开放-封闭原则。',
           knowledgePoints: ['agent-orchestration']
+        }
+      ],
+      walkthroughSteps: [
+        {
+          id: 1,
+          title: '扫描阶段枚举与状态定义',
+          description: 'ScanPhase 枚举定义扫描的四个阶段（侦察→扫描→利用→报告→完成），是典型的有限状态机。ScanState 数据类持有整个扫描过程的状态：扫描 ID、目标、配置、当前阶段、Agent 上下文、各 Agent 结果、错误列表。这种集中式状态管理让扫描过程可追踪、可恢复。',
+          filePath: 'orchestrator',
+          highlightLines: [22, 38],
+          keyInsight: '状态机驱动的阶段流转，让复杂的多阶段任务清晰可控。'
+        },
+        {
+          id: 2,
+          title: 'ScanOrchestrator 类与阶段映射',
+          description: 'PHASE_AGENTS 类变量定义每个阶段对应的 Agent 类列表——这是"配置而非编码"的设计，新增阶段或 Agent 只需修改这个映射。__init__ 接收 LLM、配置、Docker 沙箱、浏览器管理器等依赖，active_scans 字典支持并发管理多个扫描任务。这种设计让流程调整无需改动执行逻辑。',
+          filePath: 'orchestrator',
+          highlightLines: [41, 62],
+          keyInsight: '数据驱动的阶段-Agent 映射，新增流程只需改配置不改代码。'
+        },
+        {
+          id: 3,
+          title: '启动扫描：异步任务创建',
+          description: 'start_scan 创建 AgentContext（含共享状态字典）和 ScanState，用 asyncio.create_task 异步启动扫描并立即返回 scan_id。这种"长任务异步化"模式让 API 调用不阻塞，调用者可后续通过 get_scan_status 查询进度。共享状态字典是 Agent 间数据传递的通道。',
+          filePath: 'orchestrator',
+          highlightLines: [64, 92],
+          keyInsight: 'asyncio.create_task 实现扫描异步化，API 立即返回不阻塞调用者。'
+        },
+        {
+          id: 4,
+          title: '阶段流转与扫描执行',
+          description: '_run_scan 按顺序遍历每个阶段：调用 _run_phase_agents 执行该阶段所有 Agent，然后检查 _should_continue 决定是否继续。支持 dry_run 模式跳过漏洞利用阶段。所有异常被捕获并记录到 state.errors，不会因为一个阶段失败导致整个进程崩溃。阶段完成后更新状态为 COMPLETED。',
+          filePath: 'orchestrator',
+          highlightLines: [94, 125],
+          keyInsight: '逐阶段推进 + 早期停止策略，平衡扫描深度与资源消耗。'
+        },
+        {
+          id: 5,
+          title: '并行 Agent 执行与工具注入',
+          description: '_run_phase_agents 用 asyncio.gather 并行执行同阶段所有 Agent，return_exceptions=True 确保单个失败不影响其他。_get_tools_for_agent 实现依赖注入：侦察 Agent 获得扫描工具但不获得利用工具，符合最小权限原则。_should_continue 检查严重漏洞数量实现早期停止。get_scan_status 提供状态查询接口。',
+          filePath: 'orchestrator',
+          highlightLines: [127, 205],
+          keyInsight: '并行执行提升效率，工具按角色注入遵循最小权限原则。'
         }
       ]
     }

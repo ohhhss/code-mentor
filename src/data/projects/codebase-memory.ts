@@ -321,6 +321,48 @@ export const codebaseMemoryData: LargeProjectData = {
           content: 'parser_reparse展示Tree-sitter最强大的特性：增量解析。当代码被编辑时，不需要重新解析整个文件——ts_tree_edit告知旧树编辑发生的位置和内容，ts_parser_parse_string传入旧树，Tree-sitter内部只重新解析受影响的节点，复用其余部分。对于几万行的大文件，增量解析比全量解析快10-100倍。parser_free_result正确释放TSTree、TSParser和ParseResult本身，C语言中手动内存管理必须严谨。',
           knowledgePoints: ['tree-sitter']
         }
+      ],
+      walkthroughSteps: [
+        {
+          id: 1,
+          title: '语言注册表数据结构',
+          description: '代码开头导入 Tree-sitter 头文件和标准库，定义 LanguageEntry 结构体描述一种可解析的语言：名称、扩展名列表（NULL 结尾的字符串数组）、Tree-sitter 语言工厂函数指针。MAX_LANGUAGES 设为 64 预留空间，静态数组和计数器实现简单的注册表，避免动态数据结构的复杂性。',
+          filePath: 'parser-init',
+          highlightLines: [1, 15],
+          keyInsight: '静态数组 + 函数指针实现的语言注册表，简单且高效。'
+        },
+        {
+          id: 2,
+          title: '语言注册：parser_init',
+          description: 'parser_init 函数重置计数器后逐个注册支持的语言：C、C++、Python、TypeScript、JavaScript、Rust、Go、Java 等。每行调用 parser_register_language 传入语言名、扩展名数组和 Tree-sitter 工厂函数。这种"注册表模式"让新增语言只需一行注册调用，无需修改核心解析逻辑。',
+          filePath: 'parser-init',
+          highlightLines: [17, 28],
+          keyInsight: '注册表模式：新增语言只需一行注册调用，对扩展开放对修改封闭。'
+        },
+        {
+          id: 3,
+          title: '注册函数与边界检查',
+          description: 'parser_register_language 函数检查是否超过 MAX_LANGUAGES 上限，然后将语言信息写入数组并递增计数器。边界检查防止数组越界，fprintf 输出警告信息。这种简单的注册函数封装了注册表写入逻辑，调用者无需关心内部存储细节。',
+          filePath: 'parser-init',
+          highlightLines: [30, 40],
+          keyInsight: '边界检查防止越界，注册逻辑封装让调用者无需关心存储细节。'
+        },
+        {
+          id: 4,
+          title: '语言检测与文件解析',
+          description: 'parser_detect_language 从文件名提取扩展名，遍历注册表线性匹配（语言数量有限 O(n) 完全可接受）。parser_parse_file 是解析入口：检测语言→创建 TSParser→设置语言→解析源码生成 TSTree→封装为 ParseResult 返回。ts_parser_set_language 可能因 ABI 不兼容失败，需检查返回值。',
+          filePath: 'parser-init',
+          highlightLines: [44, 82],
+          keyInsight: '文件扩展名驱动语言选择，封装统一接口让调用者无需关心具体语言。'
+        },
+        {
+          id: 5,
+          title: '增量解析与资源释放',
+          description: 'parser_reparse 展示 Tree-sitter 最强大的特性：增量解析。ts_tree_edit 告知旧树编辑位置，ts_parser_parse_string 传入旧树后只重解析受影响节点，复用未变化部分。大文件中性能提升可达 10-100 倍。parser_free_result 正确释放 TSTree、TSParser 和 ParseResult，C 语言手动内存管理必须严谨。',
+          filePath: 'parser-init',
+          highlightLines: [84, 104],
+          keyInsight: '增量解析只重算变化部分，大文件性能提升两个数量级。'
+        }
       ]
     },
     {
@@ -348,6 +390,48 @@ export const codebaseMemoryData: LargeProjectData = {
           title: '边创建与事务控制',
           content: 'graph_add_edge添加节点间的关系，同样使用预编译语句。graph_begin_transaction和graph_commit暴露事务边界——批量索引整个代码库时，先BEGIN TRANSACTION，插入所有节点边后再COMMIT，性能提升显著（SQLite事务提交时才刷盘，单条插入一次事务意味着每次插入都刷盘）。graph_close正确finalize所有预编译语句、关闭数据库连接、释放内存，C语言中资源清理顺序很重要。',
           knowledgePoints: ['knowledge-graph']
+        }
+      ],
+      walkthroughSteps: [
+        {
+          id: 1,
+          title: '节点与关系类型枚举',
+          description: 'NodeKind 枚举定义代码中常见的符号类型（文件、函数、类、变量、接口、类型、模块、导入），EdgeKind 枚举定义符号间的语义关系（定义、调用、引用、继承、导入、包含、实现）。这两个枚举覆盖了代码分析中的核心语义关系，是知识图谱的"词汇表"，决定了引擎能回答哪些问题。',
+          filePath: 'knowledge-graph',
+          highlightLines: [6, 27],
+          keyInsight: '丰富的节点和边类型决定了图谱的表达能力，覆盖代码核心语义。'
+        },
+        {
+          id: 2,
+          title: 'KnowledgeGraph 结构体定义',
+          description: 'KnowledgeGraph 结构体持有 sqlite3 数据库连接和四个预编译语句（insert_node_stmt、insert_edge_stmt、find_refs_stmt、find_calls_stmt）。预编译语句复用查询计划避免重复解析 SQL，是 SQLite 性能优化的核心技巧。结构体设计将数据库操作所需的所有资源集中管理，便于生命周期控制。',
+          filePath: 'knowledge-graph',
+          highlightLines: [29, 35],
+          keyInsight: '预编译语句是 SQLite 性能优化核心，复用查询计划避免重复解析。'
+        },
+        {
+          id: 3,
+          title: 'graph_open：Schema 初始化与预编译',
+          description: 'graph_open 打开数据库连接后执行 CREATE TABLE IF NOT EXISTS 初始化 Schema：nodes 表存储符号位置和元数据，edges 表通过外键关联两个节点。UNIQUE 约束防止重复边。随后用 sqlite3_prepare_v2 预编译常用 SQL 语句（插入节点、插入边、查找引用）。索引（name、file_path、source_id、target_id）加速常用查询。',
+          filePath: 'knowledge-graph',
+          highlightLines: [37, 90],
+          keyInsight: 'UNIQUE 约束防重复，索引加速查询，预编译语句优化性能。'
+        },
+        {
+          id: 4,
+          title: '节点与边的插入操作',
+          description: 'graph_add_node 绑定参数后执行插入，使用 SQLITE_TRANSIENT 让 SQLite 拷贝字符串（因传入字符串可能在执行后被释放）。sqlite3_last_insert_rowid 获取自增 ID。所有绑定后必须 sqlite3_reset 重置语句状态以便下次使用。graph_add_edge 添加节点间关系，同样使用预编译语句和参数绑定。',
+          filePath: 'knowledge-graph',
+          highlightLines: [92, 126],
+          keyInsight: 'SQLITE_TRANSIENT 确保字符串安全，reset 复用语句提升性能。'
+        },
+        {
+          id: 5,
+          title: '事务控制与资源清理',
+          description: 'graph_begin_transaction 和 graph_commit 暴露事务边界——批量索引整个代码库时必须用事务，SQLite 默认每条语句一个事务，批量插入不用事务速度会慢 1000 倍。graph_close 正确 finalize 所有预编译语句、关闭数据库连接、释放内存。C 语言中资源清理顺序很重要，必须先 finalize 语句再关闭连接。',
+          filePath: 'knowledge-graph',
+          highlightLines: [128, 146],
+          keyInsight: '事务批量写入性能提升千倍，资源清理顺序必须严谨。'
         }
       ]
     }

@@ -1,0 +1,1098 @@
+/* ========================================
+   UploadPage 上传项目分析页面样式
+   ======================================== */
+
+.upload-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  overflow: hidden;
+}
+
+/* ===== 顶部导航栏 ===== */
+
+.upload-nav {
+  height: 64px;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  background-color: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  gap: 16px;
+  box-shadow: var(--shadow-xs);
+  z-index: 100;
+}
+
+.upload-nav .nav-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.upload-nav .nav-back-btn:hover {
+  background-color: var(--accent-light);
+  color: var(--accent-color);
+  transform: translateX(-2px);
+}
+
+.upload-nav .nav-back-btn:active {
+  transform: translateX(-3px);
+}
+
+.upload-nav .nav-project-name {
+  flex: 1;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+  letter-spacing: -0.01em;
+}
+
+.upload-nav .nav-project-name::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: var(--accent-color);
+  border-radius: var(--radius-full);
+}
+
+.upload-nav .nav-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===== 主内容区 三列布局 ===== */
+
+.upload-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  height: calc(100vh - 64px);
+}
+
+/* ===== 左侧边栏：上传区 + 文件树 ===== */
+
+.upload-sidebar {
+  width: 300px;
+  min-width: 300px;
+  border-right: 1px solid var(--glass-border);
+  background-color: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.upload-dropzone {
+  margin: 14px;
+  padding: 24px 16px;
+  border: 2px dashed var(--glass-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  transition: border-color 0.25s var(--ease-out), background-color 0.25s var(--ease-out), transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  background-color: var(--bg-elevated);
+  flex-shrink: 0;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.dragging {
+  border-color: var(--accent-color);
+  background-color: var(--accent-light);
+}
+
+.upload-dropzone.dragging {
+  transform: scale(1.01);
+  box-shadow: var(--shadow-md);
+}
+
+.upload-dropzone-icon {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.25s var(--ease-out);
+}
+
+.upload-dropzone.dragging .upload-dropzone-icon,
+.upload-dropzone:hover .upload-dropzone-icon {
+  color: var(--accent-color);
+}
+
+.upload-dropzone-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.upload-select-btn {
+  padding: 10px 22px;
+  border: none;
+  background: var(--accent-color);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-out), transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  box-shadow: var(--shadow-sm);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.upload-select-btn:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.upload-select-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.upload-select-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.upload-error-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 14px 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background-color: var(--error-bg);
+  color: var(--error-color);
+  font-size: 12px;
+  line-height: 1.5;
+  border: 1px solid color-mix(in srgb, var(--error-color) 20%, transparent);
+}
+
+.upload-file-count {
+  padding: 0 18px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.upload-file-tree-wrapper {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 覆盖 FileTree 内置样式以适配上传侧边栏 */
+.upload-file-tree-wrapper .file-tree-panel {
+  width: 100%;
+  border-right: none;
+  height: 100%;
+}
+
+/* ===== 中间代码区 ===== */
+
+.upload-code-area {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  min-width: 0;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.upload-code-area .code-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* ===== 右侧边栏：API 配置 / 导师面板 ===== */
+
+.upload-mentor-sidebar {
+  width: 420px;
+  min-width: 420px;
+  border-left: 1px solid var(--glass-border);
+  background-color: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* ===== API 配置表单 ===== */
+
+.upload-api-config {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.upload-api-config-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background-color: var(--bg-secondary);
+  position: relative;
+}
+
+.upload-api-config-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent-color);
+}
+
+.upload-api-config-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.upload-api-config-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.upload-api-config-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.upload-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upload-form-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.upload-form-label::before {
+  content: '';
+  width: 3px;
+  height: 10px;
+  background: var(--accent-color);
+  border-radius: var(--radius-full);
+}
+
+.upload-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.upload-form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: var(--font-mono);
+  transition: border-color 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  outline: none;
+}
+
+.upload-form-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px var(--accent-light);
+}
+
+.upload-form-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* 模型选择器 */
+.upload-model-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a8a29e' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  font-family: var(--font-sans);
+}
+
+.upload-model-fetching {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--accent-color);
+}
+
+.upload-model-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--error-color);
+}
+
+.upload-model-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.upload-input-suffix-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.25s var(--ease-out), background-color 0.25s var(--ease-out);
+}
+
+.upload-input-suffix-btn:hover {
+  color: var(--accent-color);
+  background-color: var(--accent-light);
+}
+
+.upload-input-wrapper .upload-form-input {
+  padding-right: 44px;
+}
+
+.upload-connection-msg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid transparent;
+}
+
+.upload-connection-msg.testing {
+  background-color: var(--accent-light);
+  color: var(--accent-color);
+  border-color: var(--accent-medium);
+}
+
+.upload-connection-msg.success {
+  background-color: var(--success-bg);
+  color: var(--success-color);
+  border-color: color-mix(in srgb, var(--success-color) 25%, transparent);
+}
+
+.upload-connection-msg.error {
+  background-color: var(--error-bg);
+  color: var(--error-color);
+  border-color: color-mix(in srgb, var(--error-color) 25%, transparent);
+}
+
+.upload-api-config-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-out), border-color 0.25s var(--ease-out), color 0.25s var(--ease-out), transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
+  white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.upload-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.upload-btn-primary {
+  flex: 1;
+  background: var(--accent-color);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.upload-btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.upload-btn-secondary {
+  flex: 1;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.upload-btn-secondary:hover:not(:disabled) {
+  background-color: var(--accent-light);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.upload-btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border-color);
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.upload-btn-ghost:hover:not(:disabled) {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-color: var(--text-muted);
+}
+
+.upload-btn-sm {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+/* ===== 空文件提示 ===== */
+
+.upload-mentor-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 28px;
+  gap: 14px;
+}
+
+.upload-mentor-placeholder-icon {
+  font-size: 56px;
+  opacity: 0.5;
+  margin-bottom: 8px;
+}
+
+.upload-mentor-placeholder-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.upload-mentor-placeholder-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+/* ===== 分析内容容器 ===== */
+
+.upload-mentor-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.upload-analyze-bar {
+  flex-shrink: 0;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: var(--bg-secondary);
+}
+
+/* 分析范围切换器 */
+.upload-scope-toggle {
+  display: flex;
+  gap: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+}
+
+.upload-scope-option {
+  flex: 1;
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out);
+  font-family: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.upload-scope-option:hover:not(:disabled):not(.active) {
+  background: var(--accent-light);
+  color: var(--text-primary);
+}
+
+.upload-scope-option.active {
+  background: var(--accent-color);
+  color: #fff;
+}
+
+.upload-scope-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 分析按钮行 */
+.upload-analyze-bar-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.upload-analyze-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: none;
+  background: var(--accent-color);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-out), transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
+  box-shadow: var(--shadow-sm);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.upload-analyze-btn:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.upload-analyze-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.upload-mentor-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 覆盖 MentorPanel 内置样式以适配右侧边栏 */
+.upload-mentor-body .mentor-panel {
+  width: 100%;
+  border-left: none;
+  height: 100%;
+}
+
+/* ===== 分析中状态 ===== */
+
+.upload-analyzing-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 48px 24px;
+  color: var(--text-muted);
+}
+
+.upload-analyzing-state .spin {
+  color: var(--accent-color);
+}
+
+.upload-analyzing-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* ===== 分析错误 ===== */
+
+.upload-analysis-error {
+  flex: 1;
+  display: flex;
+  gap: 14px;
+  padding: 24px 20px;
+  margin: 16px;
+  border-radius: var(--radius-lg);
+  background-color: var(--error-bg);
+  border: 1px solid color-mix(in srgb, var(--error-color) 20%, transparent);
+  color: var(--error-color);
+  align-items: flex-start;
+}
+
+.upload-analysis-error > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.upload-analysis-error-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.upload-analysis-error-msg {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* ===== 未分析提示 ===== */
+
+.upload-mentor-prompt {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 48px 28px;
+  text-align: center;
+}
+
+.upload-mentor-prompt-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+}
+
+.upload-mentor-prompt-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 260px;
+}
+
+/* ===== 动画 ===== */
+
+.spin {
+  animation: upload-spin 1s linear infinite;
+}
+
+@keyframes upload-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== 批量分析进度 ===== */
+
+.upload-batch-progress {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 40px 28px;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-batch-progress-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--accent-color);
+}
+
+.upload-batch-progress-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.upload-batch-progress-file {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-batch-progress-bar {
+  width: 100%;
+  max-width: 300px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  overflow: hidden;
+}
+
+.upload-batch-progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--accent-color);
+  transition: width 0.4s var(--ease-out);
+}
+
+.upload-batch-progress-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+}
+
+.upload-batch-stat-success {
+  color: var(--success-color);
+  font-weight: 600;
+}
+
+.upload-batch-stat-error {
+  color: var(--error-color);
+  font-weight: 600;
+}
+
+/* ===== 批量分析汇总 ===== */
+
+.upload-batch-summary {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 48px 28px;
+  text-align: center;
+}
+
+.upload-batch-summary-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background: var(--success-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--success-color);
+}
+
+.upload-batch-summary-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.upload-batch-summary-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+}
+
+.upload-batch-summary-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1200px) {
+  .upload-sidebar {
+    width: 260px;
+    min-width: 260px;
+  }
+
+  .upload-mentor-sidebar {
+    width: 380px;
+    min-width: 380px;
+  }
+}
+
+/* ===== 视图切换 Tab ===== */
+
+.upload-view-tabs {
+  flex-shrink: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 0 18px;
+  padding-top: 10px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.upload-view-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.upload-view-tab:hover:not(:disabled) {
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+}
+
+.upload-view-tab.active {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+.upload-view-tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upload-view-regen-btn {
+  margin-left: auto;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: color 0.2s var(--ease-out), background-color 0.2s var(--ease-out), transform 0.3s var(--ease-out);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.upload-view-regen-btn:hover:not(:disabled) {
+  color: var(--accent-color);
+  background-color: var(--accent-light);
+}
+
+.upload-view-regen-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== 架构视图容器（compact 模式） ===== */
+
+.upload-architecture-view {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  min-height: 0;
+}
+
+/* compact 模式下的 ArchitectureView 适配 */
+.upload-architecture-view .architecture-view {
+  padding: 16px;
+  gap: 18px;
+}
+
+.upload-architecture-view .arch-project-name {
+  font-size: 20px;
+}
+
+.upload-architecture-view .arch-summary {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.upload-architecture-view .arch-section-title {
+  font-size: 14px;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.upload-architecture-view .diagram-modules {
+  gap: 8px;
+}
+
+.upload-architecture-view .diagram-module-card {
+  padding: 10px 12px;
+  min-width: 0;
+  flex: 1 1 calc(50% - 4px);
+  max-width: calc(50% - 4px);
+}
+
+.upload-architecture-view .diagram-module-name {
+  font-size: 12px;
+}
+
+.upload-architecture-view .diagram-module-desc {
+  font-size: 11px;
+}
+
+.upload-architecture-view .arch-modules-list {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.upload-architecture-view .diagram-layer-label {
+  font-size: 9px;
+  padding: 4px 10px;
+  margin-bottom: 10px;
+}
+
+.upload-architecture-view .arch-module-detail-card {
+  padding: 12px;
+}
+
+.upload-architecture-view .arch-module-detail-name {
+  font-size: 13px;
+}
+
+.upload-architecture-view .arch-module-detail-desc,
+.upload-architecture-view .arch-module-detail-responsibilities {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.upload-architecture-view .arch-highlight-item {
+  font-size: 12px;
+  line-height: 1.6;
+  gap: 7px;
+}
+
+.upload-architecture-view .arch-cta-block {
+  font-size: 12px;
+  padding: 10px 14px;
+}
+
+.upload-architecture-view .arch-tech-badge {
+  font-size: 10px;
+  padding: 3px 9px;
+}
+
+.upload-architecture-view .diagram-arrow {
+  width: 16px;
+  height: 16px;
+}
+
+.upload-architecture-view .diagram-connector {
+  padding: 6px 0;
+}
+
+/* ===== 架构提示/分析中状态 ===== */
+
+.upload-arch-prompt {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px 28px;
+  text-align: center;
+}
+
+.upload-analyzing-subtext {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: -8px;
+}

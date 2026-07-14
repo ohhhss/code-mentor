@@ -3,19 +3,21 @@
   overflow: hidden;
   font-family: var(--font-mono);
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.8;
   display: flex;
   flex-direction: column;
   height: 100%;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .code-viewer-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--code-header-bg, var(--bg-secondary));
-  border-bottom: 1px solid var(--code-line-divider, var(--border-color));
-  padding: 10px 16px;
+  background-color: var(--code-header-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 14px 22px;
   flex-shrink: 0;
   position: relative;
 }
@@ -26,14 +28,14 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--accent-color), #8b5cf6);
+  width: 4px;
+  background-color: var(--accent-color);
 }
 
 .code-viewer-filename-wrapper {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .code-viewer-header-accent {
@@ -50,6 +52,7 @@
   font-size: 13px;
   color: var(--text-primary);
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .code-viewer-copy-btn {
@@ -60,12 +63,14 @@
   border: 1px solid transparent;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: var(--radius-md);
   font-size: 12px;
   font-family: var(--font-sans);
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .code-viewer-copy-btn:hover {
@@ -75,9 +80,9 @@
 }
 
 .code-viewer-copy-btn.copied {
-  color: #10b981;
-  background-color: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.2);
+  color: var(--success-color);
+  background-color: var(--success-bg);
+  border-color: transparent;
 }
 
 .code-viewer-content {
@@ -89,13 +94,13 @@
 .code-viewer-pre {
   margin: 0;
   padding: 0;
-  background: transparent !important;
+  background: var(--code-bg) !important;
   overflow: visible;
 }
 
 .code-viewer-code {
   display: block;
-  padding: 8px 0;
+  padding: 12px 0;
   background: transparent !important;
   font-family: var(--font-mono);
   font-size: 14px;
@@ -106,17 +111,17 @@
 .code-line {
   display: flex;
   padding: 0;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s var(--ease-out);
   cursor: pointer;
   position: relative;
 }
 
 .code-line:hover {
-  background-color: color-mix(in srgb, var(--accent-color) 6%, transparent);
+  background-color: var(--accent-light);
 }
 
 .code-line.selected {
-  background-color: color-mix(in srgb, var(--accent-color) 18%, transparent);
+  background-color: var(--accent-medium);
 }
 
 .code-line.selected::before {
@@ -125,12 +130,12 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 3px;
+  width: 4px;
   background-color: var(--accent-color);
 }
 
 .code-line.highlighted {
-  background-color: color-mix(in srgb, var(--accent-color) 14%, transparent);
+  background-color: var(--accent-light);
 }
 
 .code-line.highlighted::before {
@@ -139,20 +144,20 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 3px;
+  width: 4px;
   background-color: var(--accent-color);
 }
 
 .code-line.selected.highlighted {
-  background-color: color-mix(in srgb, var(--accent-color) 22%, transparent);
+  background-color: var(--accent-medium);
 }
 
 .line-number {
-  width: 56px;
-  min-width: 56px;
+  width: 64px;
+  min-width: 64px;
   text-align: right;
-  padding: 0 16px 0 12px;
-  color: var(--text-muted);
+  padding: 0 20px 0 12px;
+  color: var(--code-line-number);
   user-select: none;
   font-family: var(--font-mono);
   font-size: 13px;
@@ -164,10 +169,10 @@
   content: '';
   position: absolute;
   right: 0;
-  top: 4px;
-  bottom: 4px;
+  top: 6px;
+  bottom: 6px;
   width: 1px;
-  background-color: var(--border-color);
+  background-color: var(--code-line-divider);
 }
 
 .line-content {
@@ -176,69 +181,66 @@
   font-family: var(--font-mono);
   font-size: 14px;
   line-height: 1.8;
-  padding: 0 16px;
+  padding: 0 24px;
 }
 
-/* Light theme token colors */
 :root[data-theme="light"] .code-viewer,
 :root:not([data-theme]) .code-viewer {
-  background-color: #fdfdfe;
-  --code-bg: #fdfdfe;
-  --code-header-bg: #f6f8fc;
-  --code-text: #1f2328;
-  --token-comment: #6b7380;
-  --token-keyword: #a31a56;
-  --token-string: #0a7d3b;
-  --token-number: #8c4a00;
-  --token-function: #5a34d6;
-  --token-class-name: #1168a8;
-  --token-type-name: #1168a8;
-  --token-builtin: #1168a8;
-  --token-property: #8250df;
-  --token-variable: #1f2328;
-  --token-operator: #8a1c5e;
-  --token-punctuation: #5c6370;
-  --token-tag: #0a7d3b;
-  --token-attr-name: #8250df;
-  --token-attr-value: #0a7d3b;
-  --token-boolean: #a31a56;
-  --token-constant: #8c4a00;
-  --token-regex: #0550ae;
-  --token-plain: #1f2328;
-  --code-line-number: #8b95a5;
-  --code-line-divider: #e2e8f0;
+  background-color: #fefefe;
+  --code-bg: #fefefe;
+  --code-header-bg: #f7f5f2;
+  --code-text: #1e293b;
+  --token-comment: #64748b;
+  --token-keyword: #c2410c;
+  --token-string: #15803d;
+  --token-number: #b45309;
+  --token-function: #2563eb;
+  --token-class-name: #1d4ed8;
+  --token-type-name: #1d4ed8;
+  --token-builtin: #1d4ed8;
+  --token-property: #7c3aed;
+  --token-variable: #1e293b;
+  --token-operator: #b91c1c;
+  --token-punctuation: #64748b;
+  --token-tag: #15803d;
+  --token-attr-name: #7c3aed;
+  --token-attr-value: #15803d;
+  --token-boolean: #c2410c;
+  --token-constant: #b45309;
+  --token-regex: #0369a1;
+  --token-plain: #1e293b;
+  --code-line-number: #94a3b8;
+  --code-line-divider: #e7e2db;
 }
 
-/* Dark theme token colors */
 :root[data-theme="dark"] .code-viewer {
-  background-color: #0c0f1a;
-  --code-bg: #0c0f1a;
-  --code-header-bg: #121629;
-  --code-text: #dce3f0;
-  --token-comment: #5b6580;
-  --token-keyword: #c792ea;
-  --token-string: #c3e88d;
-  --token-number: #f78c6c;
-  --token-function: #82aaff;
-  --token-class-name: #ffcb6b;
-  --token-type-name: #ffcb6b;
-  --token-builtin: #ffcb6b;
-  --token-property: #89ddff;
-  --token-variable: #dce3f0;
-  --token-operator: #89ddff;
-  --token-punctuation: #7f8ba8;
-  --token-tag: #f07178;
-  --token-attr-name: #ffcb6b;
-  --token-attr-value: #c3e88d;
-  --token-boolean: #f78c6c;
-  --token-constant: #f78c6c;
-  --token-regex: #89ddff;
-  --token-plain: #dce3f0;
-  --code-line-number: #4a5578;
-  --code-line-divider: #1e2640;
+  background-color: #09070c;
+  --code-bg: #09070c;
+  --code-header-bg: #131017;
+  --code-text: #e2e8f0;
+  --token-comment: #64748b;
+  --token-keyword: #fb923c;
+  --token-string: #4ade80;
+  --token-number: #fbbf24;
+  --token-function: #60a5fa;
+  --token-class-name: #facc15;
+  --token-type-name: #facc15;
+  --token-builtin: #facc15;
+  --token-property: #22d3ee;
+  --token-variable: #e2e8f0;
+  --token-operator: #f87171;
+  --token-punctuation: #94a3b8;
+  --token-tag: #f87171;
+  --token-attr-name: #facc15;
+  --token-attr-value: #4ade80;
+  --token-boolean: #fbbf24;
+  --token-constant: #fbbf24;
+  --token-regex: #22d3ee;
+  --token-plain: #e2e8f0;
+  --code-line-number: #475569;
+  --code-line-divider: #27232b;
 }
 
-/* Override line-number color for code viewer */
 .code-viewer .line-number {
   color: var(--code-line-number);
 }
@@ -246,43 +248,31 @@
   background-color: var(--code-line-divider);
 }
 
-/* Base token reset */
 .code-viewer .token {
   background: transparent !important;
   color: var(--token-plain);
 }
 
-/* Code text baseline */
 .code-viewer .code-viewer-code,
 .code-viewer .line-content {
   color: var(--code-text);
 }
 
-/* =============================================
-   Token styling — ordered by priority
-   (later rules override earlier ones on elements
-    with multiple token classes)
-   ============================================= */
-
-/* 1. Punctuation — lowest priority, structural */
 .code-viewer .token.punctuation {
   color: var(--token-punctuation);
 }
 
-/* 2. Operators & arrows */
 .code-viewer .token.operator,
 .code-viewer .token.arrow {
   color: var(--token-operator);
 }
 
-/* 3. Plain text & variables & entities */
 .code-viewer .token.plain,
 .code-viewer .token.variable,
 .code-viewer .token.entity {
   color: var(--token-variable);
 }
 
-/* 4. Properties & attributes */
 .code-viewer .token.property,
 .code-viewer .token.property-access {
   color: var(--token-property);
@@ -292,13 +282,11 @@
   color: var(--token-attr-name);
 }
 
-/* 5. Tags & selectors */
 .code-viewer .token.tag,
 .code-viewer .token.selector {
   color: var(--token-tag);
 }
 
-/* 6. Strings & regex */
 .code-viewer .token.string,
 .code-viewer .token.attr-value,
 .code-viewer .token.char,
@@ -310,21 +298,18 @@
   color: var(--token-regex);
 }
 
-/* 7. Numbers & constants */
 .code-viewer .token.number,
 .code-viewer .token.symbol,
 .code-viewer .token.constant {
   color: var(--token-number);
 }
 
-/* 8. Functions & methods */
 .code-viewer .token.function,
 .code-viewer .token.generic-function > .token.function,
 .code-viewer .token.method {
   color: var(--token-function);
 }
 
-/* 9. Types & builtins */
 .code-viewer .token.class-name,
 .code-viewer .token.maybe-class-name,
 .code-viewer .token.known-class-name {
@@ -335,9 +320,6 @@
   color: var(--token-builtin);
 }
 
-/* Fix compound classes: when parent is class-name but child is operator/punctuation,
-   the child should keep its own color (not inherit class-name color).
-   These selectors ensure operators/punctuation inside generic brackets stay correct. */
 .code-viewer .token.class-name .token.operator,
 .code-viewer .token.generic .token.operator,
 .code-viewer .token.class-name .token.punctuation,
@@ -350,7 +332,6 @@
   color: var(--token-builtin);
 }
 
-/* 10. Keywords & booleans — HIGHEST semantic priority */
 .code-viewer .token.keyword,
 .code-viewer .token.boolean,
 .code-viewer .token.important,
@@ -359,7 +340,6 @@
   font-weight: 500;
 }
 
-/* Ensure keywords inside generic/class-name contexts win over type color */
 .code-viewer .token.class-name.keyword,
 .code-viewer .token.generic .token.keyword,
 .code-viewer .token.generic-function .token.keyword {
@@ -367,13 +347,11 @@
   font-weight: 500;
 }
 
-/* Ensure constants/type params (like T, K) in generics get number/constant color */
 .code-viewer .token.generic .token.constant,
 .code-viewer .token.class-name .token.constant {
   color: var(--token-constant);
 }
 
-/* ---- Comments ---- */
 .code-viewer .token.comment,
 .code-viewer .token.prolog,
 .code-viewer .token.doctype,
@@ -382,34 +360,29 @@
   font-style: italic;
 }
 
-/* ---- Generic wrapper ---- */
 .code-viewer .token.generic {
   color: var(--token-plain);
 }
 
-/* ---- Namespace ---- */
 .code-viewer .token.namespace {
   opacity: 0.85;
 }
 
-/* ---- Diff markers ---- */
 .code-viewer .token.deleted {
-  color: #f85149;
-  background-color: rgba(248, 81, 73, 0.1) !important;
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1) !important;
 }
 
 .code-viewer .token.inserted {
-  color: #3fb950;
-  background-color: rgba(63, 185, 80, 0.1) !important;
+  color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.1) !important;
 }
 
-/* ---- Light theme code-viewer-content background ---- */
 :root[data-theme="light"] .code-viewer-content,
 :root:not([data-theme]) .code-viewer-content {
-  background-color: #fdfdfe;
+  background-color: var(--code-bg);
 }
 
-/* ---- Dark theme code-viewer-content background ---- */
 :root[data-theme="dark"] .code-viewer-content {
-  background-color: #0c0f1a;
+  background-color: var(--code-bg);
 }

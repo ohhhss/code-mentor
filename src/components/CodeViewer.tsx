@@ -125,7 +125,7 @@ export function CodeViewer({
         <div className="code-viewer-header">
           <div className="code-viewer-filename-wrapper">
             <span className="code-viewer-header-accent" />
-            <FileIcon size={14} className="code-viewer-file-icon" />
+            <FileIcon size={14} className="code-viewer-file-icon" aria-hidden="true" />
             <span className="code-viewer-filename">{fileName}</span>
           </div>
           {showCopyButton && (
@@ -133,8 +133,10 @@ export function CodeViewer({
               className={`code-viewer-copy-btn ${copied ? 'copied' : ''}`}
               onClick={handleCopy}
               type="button"
+              aria-label={copied ? '已复制到剪贴板' : '复制代码'}
+              title={copied ? '已复制' : '复制代码'}
             >
-              {copied ? <Check size={16} /> : <Copy size={16} />}
+              {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
               {copied ? '已复制' : '复制'}
             </button>
           )}

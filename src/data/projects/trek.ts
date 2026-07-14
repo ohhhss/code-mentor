@@ -237,6 +237,48 @@ export const trekProjectData: LargeProjectData = {
           content: 'handleTripUpdate处理行程更新事件：1) 先通过collabService应用更新（包含冲突解决逻辑）；2) broadcast.to广播给同房间其他用户（排除自己）；3) 给发送者回发ack确认，带上服务端的版本号。这个"操作-广播-确认"模式是实时协作系统的经典设计，类似TCP的确认机制，保证客户端知道操作已被服务端接收。cursor:move是高频事件，不需要ack，直接广播即可。',
           knowledgePoints: ['websocket', 'event-driven']
         }
+      ],
+      walkthroughSteps: [
+        {
+          id: 1,
+          title: 'WebSocket 网关装饰器与认证守卫',
+          description: '代码开头导入 NestJS WebSocket 相关装饰器和 Socket.io 类型，并通过 @WebSocketGateway 装饰器声明网关，配置 CORS 与命名空间 /collab。@UseGuards(WsAuthGuard) 在 WebSocket 层复用 HTTP 认证逻辑，确保连接前校验身份。这种装饰器风格让横切关注点与业务逻辑清晰分离。',
+          filePath: 'collab-gateway',
+          highlightLines: [1, 22],
+          keyInsight: 'NestJS 通过装饰器声明式地构建 WebSocket 网关，认证守卫可跨协议复用。'
+        },
+        {
+          id: 2,
+          title: '类成员与构造函数注入',
+          description: 'CollabGateway 类实现 OnGatewayConnection 和 OnGatewayDisconnect 接口，声明 logger、userSockets 映射表（支持同一用户多设备连接）以及 @WebSocketServer 注入的 Server 实例。构造函数通过依赖注入接收 CollabService，体现 NestJS IoC 容器的自动化装配。',
+          filePath: 'collab-gateway',
+          highlightLines: [23, 30],
+          keyInsight: 'userSockets 映射表用 Set 存储 Socket ID，支持单用户多设备并发协作。'
+        },
+        {
+          id: 3,
+          title: '连接管理：房间与在线状态',
+          description: 'handleConnection 从握手数据提取 userId 和 tripId，调用 client.join(tripId) 加入 Socket.io 房间实现按行程隔离广播。随后更新 userSockets 映射表，拉取当前在线用户列表并广播给房间内所有人。房间机制是 WebSocket 分组广播的标准模式。',
+          filePath: 'collab-gateway',
+          highlightLines: [32, 44],
+          keyInsight: '按 tripId 分房间实现了行程级别的广播隔离，避免消息泄露给无关用户。'
+        },
+        {
+          id: 4,
+          title: '断开连接：清理与广播',
+          description: 'handleDisconnect 从 userSockets 中移除该客户端 Socket ID。当某用户的所有 Socket 都断开时，从映射表中删除该用户并通知 CollabService，再重新广播在线用户列表。这种引用计数式的清理逻辑确保多设备场景下状态准确。',
+          filePath: 'collab-gateway',
+          highlightLines: [45, 60],
+          keyInsight: '只有当用户所有 Socket 都断开才视为离线，保证多设备协作体验。'
+        },
+        {
+          id: 5,
+          title: '事件处理：广播与 ACK 确认',
+          description: 'handleTripUpdate 先通过 collabService.applyUpdate 应用更新（含冲突解决），再用 broadcast.to 广播给房间内其他用户，同时给发送者回发带版本号的 ACK。handleCursorMove 是高频事件，直接广播不做确认。这是实时协作系统"操作-广播-确认"的经典设计。',
+          filePath: 'collab-gateway',
+          highlightLines: [62, 94],
+          keyInsight: '关键操作走"广播+ACK"保证一致性，高频光标事件直接广播优化性能。'
+        }
       ]
     },
     {
@@ -264,6 +306,48 @@ export const trekProjectData: LargeProjectData = {
           title: 'definePlugin助手与示例',
           content: 'definePlugin是一个identity函数——接收plugin对象原样返回，但通过TypeScript泛型提供类型推导，让插件作者在写代码时获得完整的IDE提示和类型检查。Object.freeze防止插件对象被运行时修改。最后的天气图层示例展示了实现一个插件有多简单：只需要name/version，然后实现registerMapLayers返回图层定义即可。这就是[[zero-config]]设计在插件系统中的体现——最简用法零配置，复杂场景也支持。',
           knowledgePoints: ['plugin-sdk', 'zero-config', 'type-inference']
+        }
+      ],
+      walkthroughSteps: [
+        {
+          id: 1,
+          title: '插件主接口 TrekPlugin 定义',
+          description: 'TrekPlugin<Config> 泛型接口定义插件完整契约：元信息字段（name/version/description）、生命周期钩子（onInit/onDestroy）、四类扩展注册方法（registerMapLayers/registerExporters/registerBudgetCalculators/registerWidgets）以及通用事件处理器。所有钩子都是可选的，插件只需实现关心的部分。Config 泛型允许插件定义自己的配置类型。',
+          filePath: 'plugin-sdk',
+          highlightLines: [1, 15],
+          keyInsight: '最小可用接口原则——所有钩子可选，插件只需实现所需扩展点。'
+        },
+        {
+          id: 2,
+          title: '上下文 API：PluginContext',
+          description: 'PluginContext 定义宿主注入给插件的 API 集合：trip（行程数据）、map（地图）、budget（预算）、ui（界面）、http（网络）、logger（日志）。这是插件能力的"白名单"，只暴露必要能力避免安全风险。插件只能通过这些 API 与宿主交互，实现沙箱隔离。',
+          filePath: 'plugin-sdk',
+          highlightLines: [17, 24],
+          keyInsight: '受控的上下文 API 实现了插件能力隔离，防止插件越权访问。'
+        },
+        {
+          id: 3,
+          title: '扩展点定义：图层与导出器',
+          description: 'MapLayerDefinition 定义地图图层扩展点，支持 tile/geojson/marker/route 四种类型，并提供 onAdd/onClick 交互回调。ExporterDefinition 定义导出器扩展点，通过 export 异步方法返回 Blob 或 string。每个扩展点有独立的配置结构和回调，覆盖核心功能的不同维度。',
+          filePath: 'plugin-sdk',
+          highlightLines: [26, 44],
+          keyInsight: '四种扩展点覆盖地图、导出、预算、UI，对扩展开放对修改封闭。'
+        },
+        {
+          id: 4,
+          title: 'definePlugin 工具函数',
+          description: 'definePlugin 是一个 identity 函数——接收 plugin 对象原样返回，但通过 TypeScript 泛型提供完整的类型推导，让插件作者享受 IDE 提示和类型检查。Object.freeze 冻结插件对象防止运行时被意外修改，这是一种防御性编程的体现。',
+          filePath: 'plugin-sdk',
+          highlightLines: [46, 50],
+          keyInsight: 'identity 函数配合泛型实现零运行时开销的强类型插件定义。'
+        },
+        {
+          id: 5,
+          title: '示例插件：天气图层',
+          description: '最后的天气图层示例展示了实现一个插件有多简单：只需 name/version，然后实现 registerMapLayers 返回图层定义即可。onInit 中记录初始化日志，图层定义指向 OpenWeatherMap 的瓦片服务。这就是优秀 SDK 的标志——最简用法零配置。',
+          filePath: 'plugin-sdk',
+          highlightLines: [52, 71],
+          keyInsight: '优秀 SDK 的标志：实现一个功能插件只需几行代码。'
         }
       ]
     }

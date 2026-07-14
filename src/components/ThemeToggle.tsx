@@ -30,11 +30,11 @@ export function ThemeToggle({ className, style, containerId }: ThemeToggleProps)
   const renderIcon = () => {
     switch (theme) {
       case 'light':
-        return <Sun size={20} />;
+        return <Sun size={20} aria-hidden="true" />;
       case 'dark':
-        return <Moon size={20} />;
+        return <Moon size={20} aria-hidden="true" />;
       case 'system':
-        return <Monitor size={20} />;
+        return <Monitor size={20} aria-hidden="true" />;
     }
   };
 

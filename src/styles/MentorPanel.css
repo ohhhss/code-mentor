@@ -1,46 +1,47 @@
 .mentor-panel {
-  width: 380px;
+  width: 420px;
   background-color: var(--bg-secondary);
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-left: 1px solid var(--border-color);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border-left: 1px solid var(--glass-border);
+  transition: background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .mentor-panel-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
+  gap: 14px;
+  padding: 18px 22px;
   border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
-  transition: border-color 0.3s ease;
-  background: linear-gradient(180deg, var(--bg-secondary), color-mix(in srgb, var(--bg-tertiary) 30%, var(--bg-secondary)));
+  transition: border-color 0.3s var(--ease-out);
+  background-color: var(--bg-secondary);
   position: relative;
 }
 
 .mentor-panel-header::after {
   content: '';
   position: absolute;
+  left: 0;
+  top: 0;
   bottom: 0;
-  left: 20px;
-  right: 20px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+  width: 4px;
+  background: var(--accent-color);
 }
 
 .mentor-panel-header-icon {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 20%, transparent), color-mix(in srgb, #8b5cf6 15%, transparent));
+  background: var(--accent-light);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--accent-color);
   flex-shrink: 0;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-color) 20%, transparent);
 }
 
 .mentor-panel-header-title {
@@ -53,14 +54,13 @@
 .mentor-panel-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-color);
-  padding: 0 20px;
+  padding: 0 22px;
   flex-shrink: 0;
   position: sticky;
   top: 0;
   background-color: var(--bg-secondary);
   z-index: 10;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-  position: relative;
+  transition: border-color 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
 }
 
 .mentor-panel-tab {
@@ -72,7 +72,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.25s var(--ease-out);
   position: relative;
 }
 
@@ -88,15 +88,15 @@
   position: absolute;
   bottom: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--accent-color), #8b5cf6);
+  background: var(--accent-color);
   border-radius: var(--radius-full) var(--radius-full) 0 0;
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: left 0.3s var(--ease-out), width 0.3s var(--ease-out);
 }
 
 .mentor-panel-content {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 24px;
 }
 
 .mentor-panel-empty {
@@ -106,7 +106,7 @@
   justify-content: center;
   height: 100%;
   text-align: center;
-  padding: 40px 20px;
+  padding: 48px 24px;
   color: var(--text-muted);
 }
 
@@ -117,28 +117,28 @@
 
 .mentor-panel-empty-title {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 8px;
 }
 
 .mentor-panel-empty-desc {
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .mentor-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 14px;
+  margin-bottom: 24px;
 }
 
 .mentor-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background-color: var(--accent-light);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -153,7 +153,7 @@
 }
 
 .mentor-section {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .mentor-section:last-child {
@@ -165,8 +165,8 @@
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
+  letter-spacing: 1.2px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -175,19 +175,19 @@
 .mentor-section-title::before {
   content: '';
   width: 3px;
-  height: 12px;
-  background: linear-gradient(180deg, var(--accent-color), #8b5cf6);
+  height: 10px;
+  background: var(--accent-color);
   border-radius: var(--radius-full);
 }
 
 .mentor-overview-text {
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.85;
   color: var(--text-secondary);
 }
 
 .mentor-overview-text p {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .mentor-overview-text p:last-child {
@@ -207,22 +207,23 @@
   display: flex;
   gap: 12px;
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--text-secondary);
-  padding: 12px;
+  padding: 14px 16px;
   background-color: var(--bg-tertiary);
   border-radius: var(--radius-md);
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.25s var(--ease-out), transform 0.25s var(--ease-out);
 }
 
 .mentor-core-idea-item:hover {
-  background-color: color-mix(in srgb, var(--accent-color) 8%, var(--bg-tertiary));
+  background-color: var(--accent-light);
   transform: translateX(4px);
 }
 
 .mentor-core-idea-icon {
   flex-shrink: 0;
-  margin-top: 1px;
+  margin-top: 2px;
+  color: var(--accent-color);
 }
 
 .mentor-key-concepts {
@@ -232,27 +233,28 @@
 }
 
 .mentor-concept-tag {
-  padding: 6px 14px;
-  background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);
+  padding: 7px 14px;
+  background-color: var(--accent-light);
   border-radius: var(--radius-full);
   font-size: 13px;
   font-weight: 500;
   color: var(--accent-color);
-  border: 1px solid color-mix(in srgb, var(--accent-color) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 25%, transparent);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.25s var(--ease-out), border-color 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mentor-concept-tag:hover {
-  background-color: color-mix(in srgb, var(--accent-color) 18%, transparent);
+  background-color: var(--accent-medium);
   border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
-  transform: scale(1.05) translateY(-1px);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-color) 20%, transparent);
+  transform: scale(1.03);
 }
 
 .mentor-line-prompt {
   text-align: center;
-  padding: 60px 20px;
+  padding: 64px 24px;
   color: var(--text-muted);
   font-size: 14px;
   line-height: 1.8;
@@ -261,13 +263,13 @@
 .mentor-line-explanation {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .mentor-line-header {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .mentor-line-title {
@@ -275,28 +277,29 @@
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.4;
+  letter-spacing: -0.01em;
 }
 
 .mentor-line-range {
   font-size: 12px;
   font-weight: 600;
   color: var(--accent-color);
-  background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
-  padding: 4px 10px;
+  background-color: var(--accent-light);
+  padding: 5px 12px;
   border-radius: var(--radius-full);
   display: inline-block;
   width: fit-content;
-  border: 1px solid color-mix(in srgb, var(--accent-color) 20%, transparent);
+  border: 1px solid var(--accent-medium);
 }
 
 .mentor-line-content {
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.85;
   color: var(--text-secondary);
 }
 
 .mentor-line-content p {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .mentor-line-content p:last-child {
@@ -305,23 +308,24 @@
 
 .mentor-kp-inline {
   display: inline-block;
-  background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  background-color: var(--accent-light);
   color: var(--accent-color);
   border-radius: var(--radius-sm);
   padding: 2px 8px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   margin: 0 2px;
   cursor: pointer;
-  border: 1px solid color-mix(in srgb, var(--accent-color) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 25%, transparent);
   font-family: inherit;
-  transition: all 0.2s ease;
+  transition: background-color 0.25s var(--ease-out), border-color 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mentor-kp-inline:hover {
-  background-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-color) 20%, transparent);
+  background-color: var(--accent-medium);
+  transform: scale(1.03);
 }
 
 .mentor-code-inline {
@@ -331,29 +335,30 @@
   font-size: 0.9em;
   font-family: var(--font-mono);
   font-weight: 500;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s var(--ease-out);
 }
 
 .mentor-snippet-title {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
 }
 
 .mentor-snippet-why {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 8%, transparent), color-mix(in srgb, #8b5cf6 6%, transparent));
-  border-left: 3px solid var(--accent-color);
-  padding: 16px;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  margin-bottom: 20px;
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent-color);
+  padding: 18px;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  margin-bottom: 24px;
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.85;
   color: var(--text-secondary);
 }
 
 .mentor-snippet-why p {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .mentor-snippet-why p:last-child {
@@ -362,12 +367,12 @@
 
 .mentor-snippet-content {
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.85;
   color: var(--text-secondary);
 }
 
 .mentor-snippet-content p {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .mentor-snippet-content p:last-child {
@@ -375,7 +380,7 @@
 }
 
 .mentor-extra-content {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .mentor-walkthrough-container {
@@ -386,7 +391,7 @@
 }
 
 .mentor-walkthrough-toggle-wrapper {
-  padding: 16px 20px 0;
+  padding: 16px 24px 0;
   flex-shrink: 0;
 }
 
@@ -396,7 +401,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 16px;
+  padding: 14px 18px;
   border: 2px solid var(--accent-color);
   background: transparent;
   color: var(--accent-color);
@@ -404,34 +409,35 @@
   font-weight: 600;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out), border-color 0.25s var(--ease-out), transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mentor-walkthrough-toggle-btn:hover {
-  background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-color) 20%, transparent);
+  background-color: var(--accent-light);
+  transform: translateY(-2px);
 }
 
 .mentor-walkthrough-toggle-btn.active {
-  background: linear-gradient(135deg, var(--accent-color), #8b5cf6);
+  background: var(--accent-color);
   color: white;
   border-color: transparent;
 }
 
 .mentor-walkthrough-toggle-btn.active:hover {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 90%, black), color-mix(in srgb, #8b5cf6 90%, black));
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-color) 30%, transparent);
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .mentor-panel-content.walkthrough-mode {
   flex: 1;
   overflow-y: auto;
-  animation: fadeIn 0.3s ease;
+  animation: mentorFadeIn 0.35s var(--ease-out);
 }
 
-@keyframes fadeIn {
+@keyframes mentorFadeIn {
   from {
     opacity: 0;
     transform: translateY(8px);
@@ -445,11 +451,11 @@
 .mentor-walkthrough-step {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .mentor-walkthrough-step-header {
-  padding-bottom: 16px;
+  padding-bottom: 18px;
   border-bottom: 1px solid var(--border-color);
   position: relative;
 }
@@ -459,9 +465,9 @@
   position: absolute;
   bottom: -1px;
   left: 0;
-  width: 48px;
+  width: 52px;
   height: 3px;
-  background: linear-gradient(90deg, var(--accent-color), #8b5cf6);
+  background: var(--accent-color);
   border-radius: var(--radius-full);
 }
 
@@ -481,7 +487,7 @@
 }
 
 .mentor-walkthrough-step-description p {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .mentor-walkthrough-step-description p:last-child {
@@ -490,12 +496,12 @@
 
 .mentor-walkthrough-step-insight {
   display: flex;
-  gap: 12px;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 10%, transparent), color-mix(in srgb, #fbbf24 8%, transparent));
-  border-left: 3px solid var(--accent-color);
-  padding: 16px;
+  gap: 14px;
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent-color);
+  padding: 18px;
   border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-color) 10%, transparent);
+  box-shadow: var(--shadow-sm);
 }
 
 .mentor-walkthrough-step-insight-icon {
@@ -513,12 +519,12 @@
 
 .mentor-walkthrough-controls {
   flex-shrink: 0;
-  padding: 16px 20px;
+  padding: 18px 24px;
   border-top: 1px solid var(--border-color);
   background-color: var(--bg-secondary);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .mentor-walkthrough-progress {
@@ -532,8 +538,9 @@
   height: 8px;
   border-radius: 50%;
   background-color: var(--border-color);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.3s var(--ease-out), width 0.3s var(--ease-out), border-radius 0.3s var(--ease-out);
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .mentor-walkthrough-progress-dot:hover {
@@ -543,7 +550,7 @@
 .mentor-walkthrough-progress-dot.active {
   width: 28px;
   border-radius: var(--radius-full);
-  background: linear-gradient(90deg, var(--accent-color), #8b5cf6);
+  background: var(--accent-color);
 }
 
 .mentor-walkthrough-progress-dot.completed {
@@ -568,7 +575,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 12px 16px;
+  padding: 12px 18px;
   border: 1px solid var(--border-color);
   background-color: var(--bg-tertiary);
   color: var(--text-secondary);
@@ -576,14 +583,16 @@
   font-weight: 600;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.25s var(--ease-out), border-color 0.25s var(--ease-out), color 0.25s var(--ease-out), transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mentor-walkthrough-nav-btn:hover:not(:disabled) {
-  background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);
+  background-color: var(--accent-light);
   border-color: var(--accent-color);
   color: var(--accent-color);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .mentor-walkthrough-nav-btn:disabled {
@@ -592,25 +601,27 @@
 }
 
 .mentor-walkthrough-nav-btn.primary {
-  background: linear-gradient(135deg, var(--accent-color), #8b5cf6);
+  background: var(--accent-color);
   border-color: transparent;
   color: white;
 }
 
 .mentor-walkthrough-nav-btn.primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 90%, black), color-mix(in srgb, #8b5cf6 90%, black));
+  background: var(--accent-hover);
   border-color: transparent;
   color: white;
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-color) 30%, transparent);
+  box-shadow: var(--shadow-md);
 }
 
 .mentor-walkthrough-nav-btn.complete {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: var(--success-color);
   border-color: transparent;
+  color: white;
 }
 
 .mentor-walkthrough-nav-btn.complete:hover {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: color-mix(in srgb, var(--success-color) 85%, black);
   border-color: transparent;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  color: white;
+  box-shadow: var(--shadow-md);
 }

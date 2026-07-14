@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { knowledgePoints } from '@/data/knowledgePoints';
 import '@/styles/KnowledgePopover.css';
@@ -23,6 +23,7 @@ export default function KnowledgePopover({
   anchorPosition,
 }: KnowledgePopoverProps) {
   const [isClosing, setIsClosing] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const kp = knowledgePointId ? knowledgePoints[knowledgePointId] : null;
 
@@ -48,6 +49,9 @@ export default function KnowledgePopover({
   useEffect(() => {
     if (!knowledgePointId) return;
 
+    const previouslyFocused = document.activeElement as HTMLElement;
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         handleClose();
@@ -55,7 +59,10 @@ export default function KnowledgePopover({
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      previouslyFocused?.focus();
+    };
   }, [knowledgePointId, handleClose]);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -67,7 +74,9 @@ export default function KnowledgePopover({
   if (!knowledgePointId) return null;
 
   const cardStyle: React.CSSProperties = {};
-  const overlayStyle: React.CSSProperties = {};
+  const overlayStyle: React.CSSProperties = {
+    overscrollBehavior: 'contain',
+  };
 
   if (anchorPosition) {
     cardStyle.position = 'fixed';
@@ -84,19 +93,22 @@ export default function KnowledgePopover({
       className={`kp-overlay ${isClosing ? 'kp-closing' : ''}`}
       onClick={handleOverlayClick}
       style={overlayStyle}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="kp-title"
     >
       <div className="kp-card" onClick={(e) => e.stopPropagation()} style={cardStyle}>
         {kp ? (
           <>
             <div className="kp-header">
               <div className="kp-title-section">
-                <h2 className="kp-title">{kp.name}</h2>
+                <h2 id="kp-title" className="kp-title">{kp.name}</h2>
                 <span className={`kp-badge kp-badge-${kp.category}`}>
                   {categoryLabels[kp.category] || kp.category}
                 </span>
               </div>
-              <button className="kp-close-btn" onClick={handleClose} aria-label="关闭">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <button ref={closeButtonRef} className="kp-close-btn" onClick={handleClose} aria-label="关闭">
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
                   <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
@@ -116,8 +128,8 @@ export default function KnowledgePopover({
           </>
         ) : (
           <div className="kp-not-found">
-            <p>知识点未找到</p>
-            <button className="kp-close-btn" onClick={handleClose} style={{ marginTop: '16px' }}>
+            <p id="kp-title">知识点未找到</p>
+            <button ref={closeButtonRef} className="kp-close-btn" onClick={handleClose} style={{ marginTop: '16px' }} aria-label="关闭">
               关闭
             </button>
           </div>

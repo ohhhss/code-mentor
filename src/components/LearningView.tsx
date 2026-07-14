@@ -89,6 +89,9 @@ export function LearningView() {
   );
   const [snippetsSelectedLine, setSnippetsSelectedLine] = useState<number | null>(null);
 
+  const [snippetWalkthroughMode, setSnippetWalkthroughMode] = useState(false);
+  const [currentSnippetStepIndex, setCurrentSnippetStepIndex] = useState(0);
+
   if (!project || !projectId) {
     return (
       <div style={{ padding: '40px', textAlign: 'center' }}>
@@ -245,6 +248,37 @@ export function LearningView() {
     ? projectData?.snippets.find((s) => s.id === snippetsSelectedItem)
     : null;
 
+  const currentSnippetStep = snippetWalkthroughMode && selectedSnippet?.walkthroughSteps
+    ? selectedSnippet.walkthroughSteps[currentSnippetStepIndex]
+    : null;
+  const snippetHighlightedLines = snippetWalkthroughMode && currentSnippetStep
+    ? [currentSnippetStep.highlightLines]
+    : [];
+
+  const handleSnippetPrevStep = () => {
+    if (currentSnippetStepIndex > 0) {
+      setCurrentSnippetStepIndex(currentSnippetStepIndex - 1);
+    }
+  };
+
+  const handleSnippetNextStep = () => {
+    const totalSteps = selectedSnippet?.walkthroughSteps?.length || 0;
+    if (currentSnippetStepIndex < totalSteps - 1) {
+      setCurrentSnippetStepIndex(currentSnippetStepIndex + 1);
+    }
+  };
+
+  const handleSnippetToggleWalkthrough = () => {
+    setSnippetWalkthroughMode(!snippetWalkthroughMode);
+    if (!snippetWalkthroughMode) {
+      setCurrentSnippetStepIndex(0);
+    }
+  };
+
+  const handleSnippetCompleteWalkthrough = () => {
+    setSnippetWalkthroughMode(false);
+  };
+
   return (
     <div className="learning-view">
       <div className="learning-nav">
@@ -276,6 +310,9 @@ export function LearningView() {
             onSelectSnippet={(snippetId) => {
               setSnippetsSelectedItem(snippetId);
               setSnippetsSelectedLine(null);
+              const snippet = projectData?.snippets.find((s) => s.id === snippetId);
+              setSnippetWalkthroughMode(!!snippet?.walkthroughSteps?.length);
+              setCurrentSnippetStepIndex(0);
             }}
           />
         </div>
@@ -292,9 +329,14 @@ export function LearningView() {
               code={selectedSnippet.code}
               language={selectedSnippet.language}
               fileName={selectedSnippet.title}
-              selectedLine={snippetsSelectedLine}
-              highlightedLines={[]}
-              onLineClick={(lineNum) => setSnippetsSelectedLine(lineNum)}
+              selectedLine={snippetWalkthroughMode ? null : snippetsSelectedLine}
+              highlightedLines={snippetHighlightedLines}
+              onLineClick={(lineNum) => {
+                if (!snippetWalkthroughMode) {
+                  setSnippetsSelectedLine(lineNum);
+                }
+              }}
+              scrollToHighlight={snippetWalkthroughMode}
             />
           ) : (
             <div className="code-placeholder">请选择一个代码段</div>
@@ -320,9 +362,18 @@ export function LearningView() {
             <MentorPanel
               snippetExplanation={selectedSnippet.explanation}
               snippetWhyThisFile={selectedSnippet.whyThisFile}
-              selectedLine={snippetsSelectedLine}
+              selectedLine={snippetWalkthroughMode ? null : snippetsSelectedLine}
               variant="snippets"
               onKnowledgePointClick={handleKnowledgePointClick}
+              snippetWalkthroughMode={snippetWalkthroughMode}
+              currentSnippetStep={currentSnippetStep}
+              currentSnippetStepIndex={currentSnippetStepIndex}
+              totalSnippetSteps={selectedSnippet?.walkthroughSteps?.length || 0}
+              hasSnippetWalkthrough={!!selectedSnippet?.walkthroughSteps?.length}
+              onSnippetToggleWalkthrough={handleSnippetToggleWalkthrough}
+              onSnippetPrevStep={handleSnippetPrevStep}
+              onSnippetNextStep={handleSnippetNextStep}
+              onSnippetCompleteWalkthrough={handleSnippetCompleteWalkthrough}
             />
           ) : (
             <MentorPanel

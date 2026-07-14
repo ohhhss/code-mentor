@@ -1,26 +1,39 @@
 .file-tree-panel {
-  width: 240px;
+  width: 280px;
   background-color: var(--bg-secondary);
-  border-right: 1px solid var(--border-color);
+  border-right: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
   height: 100%;
   user-select: none;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .file-tree-header {
-  padding: 14px 16px;
-  font-size: 12px;
+  padding: 16px 18px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-shrink: 0;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
-  background: linear-gradient(180deg, var(--bg-secondary), color-mix(in srgb, var(--bg-tertiary) 50%, var(--bg-secondary)));
+  letter-spacing: 1.2px;
+  background-color: var(--bg-secondary);
+  position: relative;
+}
+
+.file-tree-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent-color);
 }
 
 .file-tree-header-icon {
@@ -32,22 +45,31 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 8px 0;
+  padding: 10px 0;
 }
 
 .file-tree-item {
   display: flex;
   align-items: center;
-  height: 30px;
-  padding: 0 12px;
+  height: 36px;
+  padding: 0 14px;
   cursor: pointer;
   font-size: 13px;
   color: var(--text-secondary);
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
   position: relative;
-  gap: 6px;
+  gap: 8px;
   font-family: var(--font-mono);
   white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.file-tree-item:focus-visible {
+  background-color: var(--accent-light);
+  color: var(--accent-color);
+  box-shadow: inset 0 0 0 2px var(--accent-color);
 }
 
 .file-tree-item:hover {
@@ -57,7 +79,7 @@
 
 .file-tree-item.selected {
   color: var(--accent-color);
-  background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  background-color: var(--accent-light);
   font-weight: 500;
 }
 
@@ -65,9 +87,9 @@
   content: '';
   position: absolute;
   left: 0;
-  top: 4px;
-  bottom: 4px;
-  width: 3px;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
   background-color: var(--accent-color);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
@@ -77,14 +99,18 @@
 }
 
 .file-tree-chevron {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   color: var(--text-muted);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s var(--ease-out), color 0.15s var(--ease-out);
+}
+
+.file-tree-chevron:hover {
+  color: var(--text-secondary);
 }
 
 .file-tree-chevron.expanded {
@@ -92,13 +118,13 @@
 }
 
 .file-icon {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.15s ease;
+  transition: color 0.15s var(--ease-out);
 }
 
 .folder-icon {
@@ -150,6 +176,21 @@
   flex-shrink: 0;
 }
 
+.analysis-badge {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 8px;
+  line-height: 1;
+}
+
+.analysis-badge-success {
+  color: var(--success-color);
+}
+
+.analysis-badge-error {
+  color: var(--error-color);
+}
+
 .file-tree-children {
   overflow: hidden;
 }
@@ -159,18 +200,27 @@
   flex-direction: column;
   padding: 0;
   cursor: pointer;
+  outline: none;
+}
+
+.snippet-item:focus-visible .snippet-title-row {
+  background-color: var(--accent-light);
+  color: var(--accent-color);
+  box-shadow: inset 0 0 0 2px var(--accent-color);
 }
 
 .snippet-title-row {
   display: flex;
   align-items: center;
-  height: 30px;
-  padding: 0 12px;
-  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  gap: 8px;
   font-size: 13px;
   color: var(--text-secondary);
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
   font-family: var(--font-sans);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .snippet-item:hover .snippet-title-row {
@@ -180,7 +230,7 @@
 
 .snippet-item.selected .snippet-title-row {
   color: var(--accent-color);
-  background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  background-color: var(--accent-light);
   font-weight: 500;
 }
 
@@ -188,9 +238,9 @@
   content: '';
   position: absolute;
   left: 0;
-  top: 4px;
-  bottom: 4px;
-  width: 3px;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
   background-color: var(--accent-color);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
@@ -206,16 +256,22 @@
 .architecture-item {
   display: flex;
   align-items: center;
-  height: 30px;
-  padding: 0 12px;
-  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  gap: 10px;
   font-size: 13px;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
   font-family: var(--font-sans);
   margin-bottom: 4px;
   position: relative;
+  border-radius: var(--radius-sm);
+  margin-left: 6px;
+  margin-right: 6px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 .architecture-item:hover {
@@ -223,9 +279,15 @@
   color: var(--text-primary);
 }
 
+.architecture-item:focus-visible {
+  background-color: var(--accent-light);
+  color: var(--accent-color);
+  box-shadow: inset 0 0 0 2px var(--accent-color);
+}
+
 .architecture-item.selected {
   color: var(--accent-color);
-  background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  background-color: var(--accent-light);
   font-weight: 500;
 }
 
@@ -233,9 +295,9 @@
   content: '';
   position: absolute;
   left: 0;
-  top: 4px;
-  bottom: 4px;
-  width: 3px;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
   background-color: var(--accent-color);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }

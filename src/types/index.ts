@@ -71,6 +71,37 @@ export interface CodeSnippet {
   code: string;
   explanation: string; // 代码段讲解
   lineExplanations?: LineExplanation[]; // 可选的逐行解读
+  walkthroughSteps?: WalkthroughStep[]; // 可选的逐步讲解步骤
+}
+
+// AI 分析结果
+export interface AiAnalysisResult {
+  overview: string; // 文件概述
+  coreIdeas: string[]; // 核心思路
+  keyConcepts: string[]; // 关键概念
+  lineExplanations: LineExplanation[]; // 逐行解读
+  walkthroughSteps: WalkthroughStep[]; // 逐步讲解步骤
+}
+
+// API Key 配置
+export interface ApiKeyConfig {
+  apiKey: string;
+  baseUrl: string;
+  model: string;
+}
+
+// 上传的文件
+export interface UploadedFile {
+  path: string;
+  name: string;
+  content: string;
+  language: string;
+}
+
+// 批量分析结果
+export interface BatchAnalysisResult {
+  results: Record<string, AiAnalysisResult>; // filePath -> result
+  errors: Record<string, string>;            // filePath -> error message
 }
 
 // 大型项目架构概览

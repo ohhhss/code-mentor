@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import '@/styles/OnboardingTour.css';
 
@@ -84,20 +84,46 @@ export function OnboardingTour({ projectId, onComplete, onSkip }: OnboardingTour
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onSkip();
+      } else if (e.key === 'ArrowLeft') {
+        setCurrentStep(prev => Math.max(0, prev - 1));
+      } else if (e.key === 'ArrowRight') {
+        setCurrentStep(prev => {
+          if (prev === totalSteps - 1) {
+            onComplete();
+            return prev;
+          }
+          return prev + 1;
+        });
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [totalSteps, onSkip, onComplete]);
+
   return createPortal(
-    <div className="onboarding-tour-overlay">
+    <div
+      className="onboarding-tour-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tour-title"
+    >
       <div className="onboarding-tour-card">
         <div className={`onboarding-tour-arrow ${getArrowClass()}`} />
-        <div className="onboarding-tour-step-indicator">
-          第 {currentStep + 1} / {totalSteps} 步
+        <div className="onboarding-tour-step-indicator" aria-live="polite" aria-atomic="true">
+          第 {currentStep + 1} / {totalSteps} 步：{step.title}
         </div>
-        <h2 className="onboarding-tour-title">{step.title}</h2>
+        <h2 id="tour-title" className="onboarding-tour-title">{step.title}</h2>
         <p className="onboarding-tour-description">{step.description}</p>
         <div className="onboarding-tour-footer">
-          <button className="onboarding-tour-skip" onClick={onSkip}>
+          <button className="onboarding-tour-skip" onClick={onSkip} aria-label="跳过引导">
             跳过引导
           </button>
-          <div className="onboarding-tour-dots">
+          <div className="onboarding-tour-dots" aria-hidden="true">
             {steps.map((_, index) => (
               <div
                 key={index}
@@ -107,11 +133,19 @@ export function OnboardingTour({ projectId, onComplete, onSkip }: OnboardingTour
           </div>
           <div className="onboarding-tour-nav-buttons">
             {currentStep > 0 && (
-              <button className="onboarding-tour-btn onboarding-tour-btn-prev" onClick={handlePrev}>
+              <button
+                className="onboarding-tour-btn onboarding-tour-btn-prev"
+                onClick={handlePrev}
+                aria-label="上一步"
+              >
                 上一步
               </button>
             )}
-            <button className="onboarding-tour-btn onboarding-tour-btn-next" onClick={handleNext}>
+            <button
+              className="onboarding-tour-btn onboarding-tour-btn-next"
+              onClick={handleNext}
+              aria-label={isLastStep ? '开始学习' : '下一步'}
+            >
               {isLastStep ? '开始学习 🎉' : '下一步'}
             </button>
           </div>
